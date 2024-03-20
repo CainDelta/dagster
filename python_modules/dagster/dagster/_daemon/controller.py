@@ -29,12 +29,18 @@ from dagster._daemon.run_coordinator.queued_run_coordinator_daemon import Queued
 from dagster._daemon.types import DaemonHeartbeat, DaemonStatus
 from dagster._utils.interrupts import raise_interrupts_as
 from dagster._utils.log import configure_loggers
+import os
 
 # How long beyond the expected heartbeat will the daemon be considered healthy
 DEFAULT_DAEMON_HEARTBEAT_TOLERANCE_SECONDS = 1800
 
 # Default interval at which daemons run
-DEFAULT_DAEMON_INTERVAL_SECONDS = 30
+default_interval = int(os.getenv('DEFAULT_DAEMON_INTERVAL_SECONDS'))
+
+if default_interval:
+    DEFAULT_DAEMON_INTERVAL_SECONDS = default_interval
+else:
+    DEFAULT_DAEMON_INTERVAL_SECONDS = 30
 
 # Interval at which heartbeats are posted
 DEFAULT_HEARTBEAT_INTERVAL_SECONDS = 30
